@@ -68,8 +68,15 @@ def pingpong(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def helper(index, nth_term, direction):
+        if index == n:
+            return nth_term
+        elif index % 8 == 0 or num_eights(index):
+            return helper(index+1, nth_term - direction, -direction)
+        else:
+            return helper(index+1, nth_term + direction, direction)
 
+    return helper(1, 1, 1)
 
 def next_larger_coin(coin):
     """Returns the next larger coin in order.
@@ -124,8 +131,17 @@ def count_coins(change):
     >>> check(HW_SOURCE_FILE, 'count_coins', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def helper(n, m):
+        if n == 0:
+            return 1
+        elif n < 0:
+            return 0
+        elif m == None:
+            return 0
+        else:
+            return helper(n, next_larger_coin(m)) + helper(n-m, m)
 
+    return helper(change, 1)
 
 anonymous = False  # Change to True if you would like to remain anonymous on the final leaderboard.
 
