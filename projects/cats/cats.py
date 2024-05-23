@@ -150,7 +150,13 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    d_fn = lambda word: diff_function(typed_word, word, limit)
+    min_word = min(word_list, key=d_fn)
+
+    if typed_word in word_list or d_fn(min_word) > limit:
+        return typed_word
+    else:
+        return min_word
     # END PROBLEM 5
 
 
@@ -177,7 +183,14 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    if not typed or not source:
+        return abs(len(typed) - len(source))
+    elif limit < 0:
+        return limit + 1
+    elif typed[0] == source[0]:
+        return feline_fixes(typed[1:], source[1:], limit)
+    else:
+        return 1 + feline_fixes(typed[1:], source[1:], limit - 1)
     # END PROBLEM 6
 
 
@@ -196,22 +209,20 @@ def minimum_mewtations(start, goal, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ______________:  # Fill in the condition
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    elif ___________:  # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    if limit < 0:  # Fill in the condition
+        return limit + 1
+    elif not start:  # Feel free to remove or add additional cases
+        return len(goal)
+    elif not goal:
+        return len(start)
+    elif start[0] == goal[0]:
+        return minimum_mewtations(start[1:], goal[1:], limit)
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+        add = 1 + minimum_mewtations(start, goal[1:], limit - 1)
+        remove = 1 + minimum_mewtations(start[1:], goal, limit - 1)
+        substitute = 1 + minimum_mewtations(start[1:], goal[1:], limit - 1)
+
+        return min(add, remove, substitute)
 
 
 def final_diff(typed, source, limit):
@@ -252,7 +263,18 @@ def report_progress(typed, prompt, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    correct_words = len(typed)
+
+    for i in range(len(typed)):
+        if typed[i] != prompt[i]:
+            correct_words = i
+            break
+
+    progress = correct_words/len(prompt)
+    info = {'id': user_id, 'progress': progress}
+
+    upload(info)
+    return progress
     # END PROBLEM 8
 
 
@@ -274,7 +296,7 @@ def time_per_word(words, times_per_player):
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    return match(words, [[x[i+1] - x[i] for i in range(len(x)-1)] for x in times_per_player])
     # END PROBLEM 9
 
 
@@ -295,8 +317,22 @@ def fastest_words(match):
     """
     player_indices = range(len(get_all_times(match)))  # contains an *index* for each player
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
+
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    result = [[] for _ in player_indices]
+
+    for i in word_indices:
+        fastest_time = None
+        fastest_player = None
+
+        for j in player_indices:
+            if fastest_time is None or time(match, j, i) < fastest_time:
+                fastest_time = time(match, j, i)
+                fastest_player = j
+
+        result[fastest_player].append(get_word(match, i))
+
+    return result
     # END PROBLEM 10
 
 
