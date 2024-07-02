@@ -1,4 +1,4 @@
-# CS61A Fall 2022 Coursework (In Progress)
+# CS61A Fall 2022 Coursework (discontinued as course webpage was taken down)
 
 This repository contains my solutions to the assignments and projects from the Fall 2022 offering of CS61A, "The Structure and Interpretation of Computer Programs", taught at the University of California, Berkeley.
 
